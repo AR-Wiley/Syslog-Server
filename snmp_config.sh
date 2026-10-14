@@ -1,9 +1,11 @@
 #!/bin/bash
 
-if [[ $EUID -ne 0 ]]; then
-        echo "This script must run as root" >&2
-        exit 1
-fi
+validate_root() {
+        if [[ $EUID -ne 0 ]]; then
+                echo "This script must run as root" >&2
+                exit 1
+        fi
+}
 
 update() {
 
@@ -50,6 +52,7 @@ snmp_install() {
 
 }
 
+validate_root
 update
 snmp_install      
 
