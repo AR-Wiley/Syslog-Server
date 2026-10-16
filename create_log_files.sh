@@ -3,9 +3,10 @@
 set -euo pipefail
 
 log_dir="/var/log/SysAdmin-Logs"
-log_file=("updates.log" "install.log" "users.log" "software.log")
+log_files=("updates.log" "install.log" "users.log" "software.log")
 
 function validate_root() {
+
         if [[ $EUID -ne 0 ]]; then
                 echo "This script must run as root" >&2
                 exit 1
@@ -13,24 +14,32 @@ function validate_root() {
 }
 
 function validate_path() {
-        if [[ ! -d "log_dir" ]]; then
+
+        local dir="$1"
+        
+        if [[ ! -d "$dir" ]]; then
                 echo "Path does not exist"
                 echo "Creating path"
-                mkdir -v -p "$log_dir"
+                mkdir -v -p "$dir"
         fi        
 }
 
 function validate_files() {
-        for i in "${log_file[@]}"; do
-                if [[ ! -e "$log_dir/$i" ]]; then
+
+        local dir="$1"
+        shift
+        local -a files=("$@")
+        
+        for i in "${files[@]}"; do
+                if [[ ! -e "$dir/$i" ]]; then
                         echo "File $i does not exist"
                         echo "Creating file $i"
-                        touch "$log_dir/$i"
+                        touch "$dir/$i"
                 fi
         done
 }
 
 validate_root
-validate_path
-validate_files
+validate_path "$log_dir"
+validate_files "$log_dir" "${log_files[@]}"
 
