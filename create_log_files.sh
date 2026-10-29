@@ -39,7 +39,12 @@ function validate_files() {
         done
 }
 
-validate_root
-validate_path "$log_dir"
-validate_files "$log_dir" "${log_files[@]}"
+function main() {
+    validate_root
+    validate_path "$log_dir"
+    validate_files "$log_dir" "${log_files[@]}"
+}
+
+main "$@"
+
 
