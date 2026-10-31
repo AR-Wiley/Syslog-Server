@@ -3,6 +3,7 @@
 set -euo pipefail
 
 log_dir="/var/log/SysAdmin-Logs"
+
 log_files=("updates.log" "installs.logs" "removals.log"  
            "users.log" "software.log" "services.log" 
            "firewall.log" "security.log" "network.log" "backups.log")
